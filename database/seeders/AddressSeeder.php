@@ -23,7 +23,7 @@ class AddressSeeder extends Seeder
                 'addressable_type' => User::class
             ]);
         }
-        
+
         $providers = Provider::all();
         foreach ($providers as $provider) {
             Address::factory()->create([
@@ -34,10 +34,18 @@ class AddressSeeder extends Seeder
 
         $sales = Sale::all();
         foreach ($sales as $sale) {
-            Address::factory()->create([
-                'addressable_id' => $sale->id,
-                'addressable_type' => Sale::class
-            ]);
+            $userAddress = $sale->user->addresses->first();
+            if ($userAddress) {
+                Address::factory()->create([
+                    'addressable_id' => $sale->id,
+                    'addressable_type' => Sale::class,
+                    'line_1' => $userAddress->line_1,
+                    'line_2' => $userAddress->line_2,
+                    'city' => $userAddress->city,
+                    'post_code' => $userAddress->post_code,
+                    'country' => $userAddress->country
+                ]);
+            }
         }
     }
 }

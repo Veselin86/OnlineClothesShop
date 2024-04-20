@@ -16,10 +16,9 @@ class SaleSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
-        $products = Product::all()->pluck('id')->toArray();
 
         foreach ($users as $user) {
-            for ($i = 0; $i < rand(1, 5); $i++) {
+            for ($i = 0; $i < rand(1, 3); $i++) {
                 $sale = Sale::create([
                     'user_id' => $user->id,
                     'date' => now(),
@@ -27,22 +26,15 @@ class SaleSeeder extends Seeder
                     'status' => 'completed'
                 ]);
 
-                $address = $user->addresses->first();
-
-                if ($address) {
-                    $saleAddress = $address->replicate();
-                    $saleAddress->addressable_id = $sale->id;
-                    $saleAddress->addressable_type = Sale::class;
-                    $saleAddress->save();
-                }
-
                 $products = Product::inRandomOrder()->take(rand(1, 3))->get();
                 $total = 0;
                 foreach ($products as $product) {
+                    $size = $product->sizes[array_rand($product->sizes)];
+                    $color = $product->colors[array_rand($product->colors)];
                     $quantity = rand(1, 3);
                     $price = $product->price * $quantity;
                     $total += $price;
-                    $sale->products()->attach($product->id, ['quantity' => $quantity, 'price' => $price]);
+                    $sale->products()->attach($product->id, ['quantity' => $quantity, 'price' => $price, 'size' => $size, 'color' => $color]);
                 }
 
                 $sale->total = $total;

@@ -57,8 +57,8 @@ class ProductSeeder extends Seeder
                     'stock' => $product['stock'],
                     'category_id' => $category->id,
                     'provider_id' => random_int(1, 5),
-                    'sizes' => json_encode($sizes),
-                    'colors' => json_encode($colors),
+                    'sizes' => $sizes,
+                    'colors' => $colors,
                     'image' => $product['image']
                 ]);
             }
