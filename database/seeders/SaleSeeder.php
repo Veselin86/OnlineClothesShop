@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\DBAL\TimestampType;
 use Illuminate\Database\Seeder;
 
 class SaleSeeder extends Seeder
@@ -29,12 +30,15 @@ class SaleSeeder extends Seeder
                 $products = Product::inRandomOrder()->take(rand(1, 3))->get();
                 $total = 0;
                 foreach ($products as $product) {
+                    $totalPriceProduct = 0;
                     $size = $product->sizes[array_rand($product->sizes)];
                     $color = $product->colors[array_rand($product->colors)];
                     $quantity = rand(1, 3);
                     $price = $product->price * $quantity;
+                    $totalPriceProduct += $price;
                     $total += $price;
-                    $sale->products()->attach($product->id, ['quantity' => $quantity, 'price' => $price, 'size' => $size, 'color' => $color]);
+
+                    $sale->products()->attach($product->id, ['quantity' => $quantity, 'price' => $product->price, 'total' => $totalPriceProduct, 'size' => $size, 'color' => $color]);
                 }
 
                 $sale->total = $total;

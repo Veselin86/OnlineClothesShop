@@ -36,4 +36,9 @@ class Product extends Model
     {
         return $this->belongsTo(Provider::class);
     }
+
+    public function sales()
+    {
+        return $this->belongsToMany(Sale::class)->withTimestamps();
+    }
 }

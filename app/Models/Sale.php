@@ -18,7 +18,7 @@ class Sale extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)->withTimestamps();
         /* return $this->belongsToMany(Product::class, "product_sale", "product_id", "sale_id", "id", "id"); */
     }
 
