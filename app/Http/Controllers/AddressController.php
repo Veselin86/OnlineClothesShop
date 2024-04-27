@@ -12,7 +12,8 @@ class AddressController extends Controller
      */
     public function index()
     {
-        //
+        $addresses = Address::all();
+        return view('addresses.index', ['addresses' => $addresses]);
     }
 
     /**
@@ -20,7 +21,7 @@ class AddressController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

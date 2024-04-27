@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Provider;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class ProviderController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $providers = Provider::all();
-        return view('providers.index', ['providers' => $providers]);
+        $users = User::all();
+        return view('users.index', ['users' => $users]);
     }
 
     /**
@@ -35,7 +35,7 @@ class ProviderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Provider $provider)
+    public function show(string $id)
     {
         //
     }
@@ -43,7 +43,7 @@ class ProviderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Provider $provider)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +51,7 @@ class ProviderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Provider $provider)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,7 +59,7 @@ class ProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Provider $provider)
+    public function destroy(string $id)
     {
         //
     }

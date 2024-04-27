@@ -49,18 +49,33 @@ class ProductSeeder extends Seeder
         $colors = ['Negro', 'Blanco', 'Rojo', 'Azul'];
 
         foreach ($categories as $category) {
-            foreach ($products[$category->name] as $product) {
-                Product::create([
-                    'name' => $product['name'],
-                    'description' => $product['description'],
-                    'price' => $product['price'],
-                    'stock' => $product['stock'],
-                    'category_id' => $category->id,
-                    'provider_id' => random_int(1, 5),
-                    'sizes' => $sizes,
-                    'colors' => $colors,
-                    'image' => $product['image']
-                ]);
+            if ($category->name === 'Accesorios') {
+                foreach ($products[$category->name] as $product) {
+                    Product::create([
+                        'name' => $product['name'],
+                        'description' => $product['description'],
+                        'price' => $product['price'],
+                        'stock' => $product['stock'],
+                        'colors' => $colors,
+                        'category_id' => $category->id,
+                        'provider_id' => random_int(1, 5),
+                        'image' => $product['image']
+                    ]);
+                }
+            } else {
+                foreach ($products[$category->name] as $product) {
+                    Product::create([
+                        'name' => $product['name'],
+                        'description' => $product['description'],
+                        'price' => $product['price'],
+                        'stock' => $product['stock'],
+                        'sizes' => $sizes,
+                        'colors' => $colors,
+                        'category_id' => $category->id,
+                        'provider_id' => random_int(1, 5),
+                        'image' => $product['image']
+                    ]);
+                } 
             }
         }
     }

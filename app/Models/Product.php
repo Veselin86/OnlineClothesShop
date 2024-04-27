@@ -39,6 +39,8 @@ class Product extends Model
 
     public function sales()
     {
-        return $this->belongsToMany(Sale::class)->withTimestamps();
+        return $this->belongsToMany(Sale::class, 'product_sale')
+            ->withTimestamps()
+            /* ->withPivot() */;
     }
 }

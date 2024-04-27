@@ -31,8 +31,12 @@ class SaleSeeder extends Seeder
                 $total = 0;
                 foreach ($products as $product) {
                     $totalPriceProduct = 0;
-                    $size = $product->sizes[array_rand($product->sizes)];
-                    $color = $product->colors[array_rand($product->colors)];
+                    if ($product->sizes != null) {
+                        $size = $product->sizes[array_rand($product->sizes)];
+                    }
+                    if ($product->colors != null) {
+                        $color = $product->colors[array_rand($product->colors)];
+                    }
                     $quantity = rand(1, 3);
                     $price = $product->price * $quantity;
                     $totalPriceProduct += $price;

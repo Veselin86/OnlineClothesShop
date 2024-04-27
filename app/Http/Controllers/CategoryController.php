@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,7 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -34,9 +36,13 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $id)
     {
-        //
+
+        $category = Category::where('id', $id)->firstOrFail();
+        $productsByCategory = Product::where('category', $category);
+        
+        return view('products.index', compact('products', $productsByCategory));
     }
 
     /**
@@ -61,5 +67,14 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //
+    }
+
+    public function getProducts($id)
+    {
+        $category = Category::with('products')->find($id);
+        if (!$category) {
+            return response()->json(['message' => 'Categoría no encontrada'], 404);
+        }
+        return response()->json($category->products);
     }
 }

@@ -10,9 +10,21 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+/*     public function index()
     {
-        //
+        $products = Product::all();
+        return view('products.index', ['products' => $products]);
+    } */
+
+    public function index($category_id = null)
+    {
+        if ($category_id) {
+            $products = Product::where('category_id', $category_id)->get();
+        } else {
+            $products = Product::all();
+        }
+    
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -34,9 +46,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::where('id', $id)->firstOrFail();
+        return view('products.show', ['product' => $product]);
     }
 
     /**

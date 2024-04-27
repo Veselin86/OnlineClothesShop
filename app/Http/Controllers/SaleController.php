@@ -12,7 +12,9 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        $sales = Sale::all();
+        /* $sales = Sale::with('products')->get(); */
+        return view('sales.index', ['sales' => $sales]);
     }
 
     /**
