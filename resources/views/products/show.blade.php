@@ -15,7 +15,8 @@
                     <ul>
                         @foreach ($product->sizes as $size)
                             {{-- <li>{{ $size }}</li> --}}
-                            <button type="button" class="size-option" data-size="{{ $size }}">{{ $size }}</button>
+                            <button type="button" class="size-option"
+                                data-size="{{ $size }}">{{ $size }}</button>
                         @endforeach
                     </ul>
                 @endif
@@ -32,7 +33,8 @@
                     <ul>
                         @foreach ($product->colors as $color)
                             {{-- <li>{{ $color }}</li> --}}
-                            <button type="button" class="color-option" data-color="{{ $color }}">{{ $color }}</button>
+                            <button type="button" class="color-option"
+                                data-color="{{ $color }}">{{ $color }}</button>
                         @endforeach
                     </ul>
                 @endif
@@ -40,7 +42,9 @@
 
             <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
             <p>{{ $product->description }}</p>
-            <button class="add-to-cart">Añadir al carrito</button>
+            @auth
+                <button class="add-to-cart">Añadir al carrito</button>
+            @endauth
         </div>
     </div>
 @endsection

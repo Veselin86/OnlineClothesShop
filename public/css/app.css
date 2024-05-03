@@ -6,7 +6,6 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 body, h1, p {
@@ -38,7 +37,7 @@ header nav ul li {
 }
 
 footer {
-    display: flexbox;
+    display: flex;
     background-color: #818a94;
     text-align: center;
     padding: 10px 20px;
@@ -52,6 +51,7 @@ footer {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
 
 .card {
@@ -95,11 +95,6 @@ footer {
     padding-top: 20px;
 }
 
-.container {
-    width: 90%;
-    margin: auto;
-}
-
 .product {
     margin-top: 10px;
     border: 1px solid #ccc;
@@ -122,4 +117,61 @@ footer {
 .size-option:focus, .color-option:focus {
     outline: none;
     text-decoration: none;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilos del formulario */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que padding no afecte el ancho total */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #aaa;
+    outline: none;
+}
+
+.btn-primary {
+    padding: 10px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #003d82;
+}
+
+.text-danger {
+    color: red;
+    
 }
