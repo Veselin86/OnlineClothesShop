@@ -22,7 +22,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
@@ -30,7 +30,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'image_url' => 'required',
+        ]);
+
+        $category = new Category();
+        $category->name = $validatedData['name'];
+        $category->description = $validatedData['description'];
+        $category->image_url = $validatedData['image_url'];
+        $category->save();
+
+        return redirect()->route('categories.index')->withSucces('¡Nueva categoria creada!');
     }
 
     /**
@@ -69,12 +81,15 @@ class CategoryController extends Controller
         //
     }
 
-    public function getProducts($id)
+    public function showProducts(Category $category)
     {
-        $category = Category::with('products')->find($id);
-        if (!$category) {
-            return response()->json(['message' => 'Categoría no encontrada'], 404);
-        }
-        return response()->json($category->products);
+        $products = $category->products;
+        return view('products.index', compact('category', 'products'));
+    }
+
+    public function createProduct($categoryId)
+    {
+        $category = Category::findOrFail($categoryId); 
+        return view('products.create', ['category' => $category]);
     }
 }

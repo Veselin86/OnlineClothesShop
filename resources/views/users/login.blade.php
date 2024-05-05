@@ -32,7 +32,7 @@
             </div>
             
             {{-- Boton para envio de formulario --}}
-            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <button type="submit" class="btn-primary">Iniciar Sesión</button>
         </form>
     </div>
 @endsection

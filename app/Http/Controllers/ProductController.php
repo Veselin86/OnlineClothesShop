@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-/*     public function index()
+    /*     public function index()
     {
         $products = Product::all();
         return view('products.index', ['products' => $products]);
@@ -23,7 +24,7 @@ class ProductController extends Controller
         } else {
             $products = Product::all();
         }
-    
+
         return view('products.index', compact('products'));
     }
 
@@ -32,7 +33,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -40,7 +41,37 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'sizes' => 'required|array',
+            'colors' => 'required|array',
+            'image' => 'required|string',
+            'provider_id' => 'required|integer',
+            'category_id' => 'required|integer'
+        ]);
+
+        $sizes = is_string($request->sizes) ? json_decode($request->sizes, true) : $request->sizes;
+        $colors = is_string($request->colors) ? json_decode($request->colors, true) : $request->colors;
+        
+        $product = new Product([
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'stock' => $validatedData['stock'],
+            'sizes' => json_encode($sizes),
+            'colors' => json_encode($colors),
+            'image' => $validatedData['image'],
+            'provider_id' => $validatedData['provider_id'],
+            'category_id' => $validatedData['category_id']
+        ]);
+
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Producto guardado con éxito');
     }
 
     /**
@@ -57,7 +88,6 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
     }
 
     /**

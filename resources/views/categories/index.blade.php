@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<a href="{{ route('categories.create') }}" class="btn btn-primary">Añadir Categoría</a>
     <div class="container">
         @foreach ($categories as $category)
         <div class="card" onclick="window.location.href='{{ route('products.index.category', $category->id) }}'">

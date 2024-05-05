@@ -43,7 +43,7 @@
             <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
             <p>{{ $product->description }}</p>
             @auth
-                <button class="add-to-cart">Añadir al carrito</button>
+                <button class="add-to-cart btn-primary">Añadir al carrito</button>
             @endauth
         </div>
     </div>

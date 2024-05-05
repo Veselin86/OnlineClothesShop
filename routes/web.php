@@ -36,7 +36,7 @@ Route::resource('/sales', SaleController::class)->names('sales');
 
 Route::get('/products/category/{categoryId}', [ProductController::class, 'index'])->name('products.index.category');
 
-Route::get('/category/{id}/products', [CategoryController::class, 'getProducts'])->name('category.products');
+Route::get('/category/{category}/products', [CategoryController::class, 'showProducts'])->name('category.products');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
