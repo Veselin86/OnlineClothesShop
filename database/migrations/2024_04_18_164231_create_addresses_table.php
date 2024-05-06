@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->morphs('addressable');
-/*             $table->unsignedBigInteger('addressable_id');
+/*          $table->unsignedBigInteger('addressable_id');
             $table->string('addressable_type'); */
             $table->string('line_1');
             $table->string('line_2')->nullable();

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -43,4 +44,10 @@ Route::middleware(['auth'])->group(function () {
         return view('users.dashboard');
     })->name('dashboard');
 });
+
+// Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+
+Route::post('/dashboard/update-phone', [UserController::class, 'updatePhone'])->name('user.update.phone');
+Route::post('/dashboard/update-address', [UserController::class, 'updateAddress'])->name('user.update.address');
+
 

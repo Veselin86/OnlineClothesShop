@@ -3,48 +3,58 @@
 @section('content')
     <div class="container">
         <div class="product">
-            <h3>{{ $product->name }}</h3>
-            <h3>Precio: {{ $product->price }}</h3>
-            <h5>Tallas disponibles:</h5>
-            @if ($product->sizes === null)
-                <ul>
-                    <li>Talla unica</li>
-                </ul>
-            @else
-                @if (is_array($product->sizes))
+
+            <form action="{{ route('sales.store') }}" method="POST">
+
+                @csrf
+
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                <h3>{{ $product->name }}</h3>
+                <h3>Precio: {{ $product->price }}</h3>
+
+                <h5>Tallas disponibles:</h5>
+                @if ($product->sizes === null)
                     <ul>
-                        @foreach ($product->sizes as $size)
-                            {{-- <li>{{ $size }}</li> --}}
-                            <button type="button" class="size-option"
-                                data-size="{{ $size }}">{{ $size }}</button>
-                        @endforeach
+                        <li style="list-style: none">Talla unica</li>
+                        <input type="hidden" name="size" value="Única">
                     </ul>
+                @else
+                    @if (is_array($product->sizes))
+                        <select name="size" required>
+                            @foreach ($product->sizes as $size)
+                                <option value="{{ $size }}">{{ $size }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 @endif
-            @endif
 
 
-            <h5>Colores disponibles:</h5>
-            @if ($product->colors === null)
-                <ul>
-                    <li>Color unico</li>
-                </ul>
-            @else
-                @if (is_array($product->colors))
+                <h5>Colores disponibles:</h5>
+                @if ($product->colors === null)
                     <ul>
-                        @foreach ($product->colors as $color)
-                            {{-- <li>{{ $color }}</li> --}}
-                            <button type="button" class="color-option"
-                                data-color="{{ $color }}">{{ $color }}</button>
-                        @endforeach
+                        <li style="list-style: none">Color unico</li>
+                        <input type="hidden" name="color" value="Único">
                     </ul>
+                @else
+                    @if (is_array($product->colors))
+                        <select name="color" required>
+                            @foreach ($product->colors as $color)
+                                <option value="{{ $color }}">{{ $color }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 @endif
-            @endif
 
-            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
-            <p>{{ $product->description }}</p>
-            @auth
-                <button class="add-to-cart btn-primary">Añadir al carrito</button>
-            @endauth
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                <p>{{ $product->description }}</p>
+                <p>Cantidad disponible: {{ $product->stock }} </p>
+                @auth
+                    <p>Cantidad elegida:</p>
+                    <input type="number" class="form-control" name="quantity" id="quantity" min="1" value="1" required>
+                    <button class="btn-primary" type="submit">Comprar</button>
+                @endauth
+            </form>
         </div>
     </div>
 @endsection

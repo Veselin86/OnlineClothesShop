@@ -55,8 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .querySelector("button.add-to-cart")
         .addEventListener("click", function () {
-            // Aquí deberás manejar la adición al carrito, usando selectedSize y selectedColor
             console.log("Añadido al carrito:", selectedSize, selectedColor);
-            // Asegúrate de implementar la lógica para comunicarte con el backend
         });
 });

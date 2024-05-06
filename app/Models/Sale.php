@@ -20,7 +20,7 @@ class Sale extends Model
     {
         return $this->belongsToMany(Product::class, 'product_sale')
             ->withTimestamps()
-            ->withPivot('size', 'color');
+            ->withPivot('size', 'color', 'quantity', 'price', 'total');
             /* return $this->belongsToMany(Product::class, "product_sale", "product_id", "sale_id", "id", "id"); */
     }
 

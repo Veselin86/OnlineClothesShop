@@ -31,17 +31,6 @@
                 <input type="number" class="form-control" name="stock" id="stock" required>
             </div>
 
-            {{--             
-            <div class="form-group">
-                <label for="sizes">Tamaños disponibles separados por coma:</label>
-                <input type="text" class="form-control" name="sizes" id="sizes" required>
-            </div> 
-
-            <div class="form-group">
-                <label for="colors">Colores disponibles:</label>
-                <input type="text" class="form-control" name="colors" id="colors" required>
-            </div>
- --}}
             <div class="form-group">
                 <label for="sizes">Tamaños disponibles:</label>
                 <select name="sizes[]" id="sizes" class="form-control" multiple>

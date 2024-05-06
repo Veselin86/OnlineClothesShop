@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 
@@ -22,7 +24,7 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard');
     }
 
     /**
@@ -30,7 +32,45 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'product_id' => 'required',
+            'quantity' => 'required|integer|min:1',
+            'size' => 'required|string',
+            'color' => 'required|string',
+        ]);
+
+        $product = Product::find($request->product_id);
+
+        $userAddress = auth()->user()->addresses->first();
+
+        $sale = Sale::create([
+            'user_id' => auth()->id(), 
+            'status' => 'completed',
+            'date' => date(now()),
+            'total' => $product->price * $request->quantity
+        ]);
+
+        $sale->products()->attach($product->id, [
+            'quantity' => $request->quantity,
+            'price' => $product->price,
+            'total' => $product->price * $request->quantity,
+            'size' => $request->size,
+            'color' => $request->color
+        ]);
+
+        $newAddress = new Address([
+            'addressable_id' => $sale->id,
+            'addressable_type' => Sale::class,
+            'line_1' => $userAddress->line_1,
+            'line_2' => $userAddress->line_2,
+            'city' => $userAddress->city,
+            'post_code' => $userAddress->post_code,
+            'country' => $userAddress->country,
+        ]);
+
+        $newAddress->save();
+
+        return redirect()->route('dashboard')->with('success', 'Producto comprado');
     }
 
     /**
