@@ -50,6 +50,8 @@ class SaleController extends Controller
             'total' => $product->price * $request->quantity
         ]);
 
+        $product->decrement('stock', $request->quantity);
+
         $sale->products()->attach($product->id, [
             'quantity' => $request->quantity,
             'price' => $product->price,
