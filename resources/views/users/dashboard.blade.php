@@ -11,20 +11,6 @@
             </form>
         </h2>
 
-
-
-        {{--             @if (auth()->user()->sales === null)
-                <p>No has realizado ninguna compra</p>
-            @else
-                @foreach (auth()->user()->sales as $sale)
-                    @foreach ($sale->products() as $product)
-                        <p> {{$product->name}} </p>
-                    @endforeach
-                    <li>
-                        <p> {{ $sale }} </p>
-                    </li> 
-                @endforeach
-            @endif --}}
         <ul>
             @foreach (auth()->user()->sales as $sale)
                 <li>
@@ -44,15 +30,16 @@
                                 </p>
                                 <p><strong>Subtotal:</strong> {{ number_format($product->pivot->total, 2) }} € </p>
                                 @if ($sale->address)
-                                <div>
-                                    <strong>Dirección de Entrega:</strong>
-                                    <p>{{ $sale->address->line_1 }} {{ $sale->address->line_2 }}</p>
-                                    <p>{{ $sale->address->city }}, {{ $sale->address->post_code }}, {{ $sale->address->country }}
-                                    </p>
-                                </div>
-                            @else
-                                <p>No hay dirección registrada para esta venta.</p>
-                            @endif
+                                    <div>
+                                        <strong>Dirección de Entrega:</strong>
+                                        <p>{{ $sale->address->line_1 }} {{ $sale->address->line_2 }}</p>
+                                        <p>{{ $sale->address->city }}, {{ $sale->address->post_code }},
+                                            {{ $sale->address->country }}
+                                        </p>
+                                    </div>
+                                @else
+                                    <p>No hay dirección registrada para esta venta.</p>
+                                @endif
                             </div>
                         @endforeach
                     </details>
@@ -71,9 +58,11 @@
                 </form>
             </div>
         @endif
-
         @if (auth()->user()->address === null)
             <div>
+                @if (auth()->user()->addresses()->exists() === false)
+                    <h3 style="color: red">Porfavor registra su dirección en nuestra sistema</h3>
+                @endif
                 <h2>Agregar Dirección</h2>
                 <form method="POST" action="{{ route('user.update.address') }}">
                     @csrf

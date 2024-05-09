@@ -24,6 +24,7 @@ class SaleController extends Controller
      */
     public function create()
     {
+
         return view('dashboard');
     }
 
@@ -32,6 +33,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'product_id' => 'required',
             'quantity' => 'required|integer|min:1',
@@ -42,6 +44,10 @@ class SaleController extends Controller
         $product = Product::find($request->product_id);
 
         $userAddress = auth()->user()->addresses->first();
+
+        if (!$userAddress) {
+            return redirect()->route('dashboard')->with('error', 'Necesita añadir una dirección antes de realizar una compra.');
+        }
 
         $sale = Sale::create([
             'user_id' => auth()->id(), 
