@@ -11,12 +11,6 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    /*     public function index()
-    {
-        $products = Product::all();
-        return view('products.index', ['products' => $products]);
-    } */
-
     public function index($category_id = null)
     {
         if ($category_id) {

@@ -2,9 +2,8 @@
 
 @section('content')
     <div class="container">
-        <div class="product">
-
-            <form action="{{ route('sales.store') }}" method="POST">
+        <div class="product" style="cursor:auto">
+            <form action="/products/{{ $product->id }}" method="POST">
 
                 @csrf
 
@@ -51,9 +50,16 @@
                 <p>Cantidad disponible: {{ $product->stock }} </p>
                 @auth
                     <p>Cantidad elegida:</p>
-                    <input type="number" class="form-control" name="quantity" id="quantity" min="1" value="1" required>
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="number" class="form-control" name="quantity" id="quantity" min="1" value="1"
+                        required>
                     <button class="btn-primary" type="submit">Comprar</button>
                 @endauth
+                @if (session('error'))
+                    <div>
+                        <h3 class="text-danger">{{ session('error') }}</h3>
+                    </div>
+                @endif
             </form>
         </div>
     </div>

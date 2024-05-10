@@ -26,9 +26,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Route::post('users.index', AuthController::class)->names('users');
+Route::post('/products/{id}', [SaleController::class, 'store'])->middleware('check.stock');
 
-// Route::resource('/users', UserController::class)->names('users');
 Route::resource('/addresses', AddressController::class)->names('addresses');
 Route::resource('/providers', ProviderController::class)->names('providers');
 Route::resource('/categories', CategoryController::class)->names('categories');
@@ -39,15 +38,16 @@ Route::get('/products/category/{categoryId}', [ProductController::class, 'index'
 
 Route::get('/category/{category}/products', [CategoryController::class, 'showProducts'])->name('category.products');
 
+Route::post('/dashboard/update-phone', [UserController::class, 'updatePhone'])->name('user.update.phone');
+Route::post('/dashboard/update-address', [UserController::class, 'updateAddress'])->name('user.update.address');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('users.dashboard');
     })->name('dashboard');
 });
 
-// Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 
-Route::post('/dashboard/update-phone', [UserController::class, 'updatePhone'])->name('user.update.phone');
-Route::post('/dashboard/update-address', [UserController::class, 'updateAddress'])->name('user.update.address');
+
 
 
