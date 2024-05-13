@@ -70,7 +70,7 @@ class UserController extends Controller
         $request->validate(['phone' => 'required|string']);
         $user = auth()->user();
         $user->phone = $request->phone;
-        $user->save();
+        $user->save;      
 
         return back()->with('success', 'Teléfono actualizado con éxito.');
     }
@@ -99,4 +99,6 @@ class UserController extends Controller
 
         return back()->with('success', 'Dirección actualizada con éxito.');
     }
+
+
 }

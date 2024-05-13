@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -19,6 +22,30 @@ class UserController extends Controller
     public function store(Request $request)
     {
         // Valida y crea un usuario nuevo
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password'))
+        ]);
+        
+        return response()->json(['data' => $user], 201);
+
+        return new UserResource($user);
+    }
+/*     public function store(Request $request)
+    {
+        // Valida y crea un usuario nuevo
         $validated = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
@@ -28,7 +55,7 @@ class UserController extends Controller
         $user = User::create($validated);
 
         return new UserResource($user);
-    }
+    } */
 
     public function show(User $user)
     {
@@ -36,18 +63,16 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function update(Request $request, User $user)
+    public function edit(Request $request)
     {
-        // Valida y actualiza un usuario existente
-        $validated = $request->validate([
-            'name' => 'sometimes|required|max:255',
-            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
-            'password' => 'sometimes|min:6',
-        ]);
+        $users = User::findorFail($request->id);
+        $users->name = $request->name;
+        $users->email = $request->email;
+        $users->password = bcrypt($request->password);
 
-        $user->update($validated);
+        $users->update();
 
-        return new UserResource($user);
+        return response()->json('Updated Succesfully');
     }
 
     public function destroy(User $user)
@@ -55,7 +80,29 @@ class UserController extends Controller
         // Elimina un usuario
         $user->delete();
 
-        return response()->json(null, 204); // No content
+        return response()->json('Deleted Succesfully'); // No content
     }
+
+   public function login(Request $request){
+        $credentials = $request->only('email', 'password');
+        if (Auth::guard('api')->attempt($credentials)) {
+            $user = Auth::guard('api')->user();
+            $jwt = JWTAuth::attempt($credentials);
+            $success = true;
+            $data = compact('user', 'jwt');
+            
+            return compact('success', 'data');
+        }else{
+            $success = false;
+            $message = ' Credenciales incorectas';
+            return compact('success', 'message');
+        }
+    } 
+
+    public function logout(){
+        Auth::guard('api')->logout();
+        $success = true;
+        return compact('success');
+    } 
 }
 
