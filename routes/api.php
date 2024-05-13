@@ -9,3 +9,5 @@ Route::delete('delete/{user}', [App\Http\Controllers\Api\UserController::class, 
 Route::post('login', [App\Http\Controllers\Api\UserController::class, 'login']);
 Route::post('logout', [App\Http\Controllers\Api\UserController::class, 'logout']);
 Route::put('edit/{id}', [App\Http\Controllers\Api\UserController::class, 'edit']);
+
+Route::apiResource('products', App\Http\Controllers\Api\ProductController::class);

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Category;
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -11,23 +11,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($category_id = null)
+    public function index()
     {
-        if ($category_id) {
-            $products = Product::where('category_id', $category_id)->get();
-        } else {
-            $products = Product::all();
-        }
-
-        return view('products.index', compact('products'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('products.create');
+        return Product::all();
     }
 
     /**
@@ -35,54 +21,36 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
+       
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'sizes' => 'required|array',
-            'colors' => 'required|array',
             'image' => 'required|string',
             'provider_id' => 'required|integer',
             'category_id' => 'required|integer'
         ]);
 
-        $sizes = is_string($request->sizes) ? json_decode($request->sizes, true) : $request->sizes;
-        $colors = is_string($request->colors) ? json_decode($request->colors, true) : $request->colors;
-        
-        $product = new Product([
+        $product = Product::create([
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
             'stock' => $validatedData['stock'],
-            'sizes' => $sizes,
-            'colors' => $colors,
             'image' => $validatedData['image'],
             'provider_id' => $validatedData['provider_id'],
             'category_id' => $validatedData['category_id']
         ]);
 
-        $product->save();
-
-        return redirect()->route('products.index')->with('success', 'Producto guardado con éxito');
+       return response()->json(['data' => $product], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::where('id', $id)->firstOrFail();
-        return view('products.show', ['product' => $product]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        
+        return response()->json(['data' => $product]);
     }
 
     /**
@@ -90,7 +58,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'string|max:255',
+            'description' => 'string',
+            'price' => 'numeric',
+            'stock' => 'integer',
+            'image' => 'string',
+            'provider_id' => 'integer',
+            'category_id' => 'integer'
+        ]);
+
+        $product->update($validated);
+
+        return response()->json(['data' => $product], 201);
     }
 
     /**
@@ -98,6 +78,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return response()->json('Deletede Succesfully');
     }
 }
