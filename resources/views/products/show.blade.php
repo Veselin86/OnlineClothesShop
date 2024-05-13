@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="container">
-        <div class="product" style="cursor:auto">
+        <div style="cursor:auto">
             <form action="/products/{{ $product->id }}" method="POST">
 
                 @csrf
 
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                <h3>{{ $product->name }}</h3>
+                <h3 style="max-width: 500px; word-wrap: break-word;">{{ $product->name }}</h3>
                 <h3>Precio: {{ $product->price }}</h3>
 
                 <h5>Tallas disponibles:</h5>
@@ -45,8 +45,8 @@
                     @endif
                 @endif
 
-                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
-                <p>{{ $product->description }}</p>
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="product-image">
+                <p style="max-width: 500px; word-wrap: break-word;">{{ $product->description }}</p>
                 <p>Cantidad disponible: {{ $product->stock }} </p>
                 @auth
                     <p>Cantidad elegida:</p>
