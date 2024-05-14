@@ -9,7 +9,7 @@ trait LogLoginTrait
 {
     public function logCreation()
     {
-        Log::info("Usuario creadocon exito con nombre {$this->name} y correo electronico {$this->email}");
+        Log::info("Usuario creado con exito con nombre {$this->name} y correo electronico {$this->email}");
     }
 
     public function logLogin()

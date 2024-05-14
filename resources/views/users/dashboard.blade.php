@@ -14,10 +14,11 @@
         <ul>
             @foreach (auth()->user()->sales as $sale)
                 <li>
+                    <a href="{{ route('sales.pdf', ['sale' => $sale->id])}}" target="_blank" class="btn-primary" style="text-decoration: none;">Factura</a>
                     <strong>Fecha de Compra:</strong> {{ $sale->created_at->toFormattedDateString() }}
                     <strong>Total de la Compra:</strong> {{ number_format($sale->total, 2) }} €
                     <strong>Estado:</strong> {{ $sale->status }}
-                    <details>
+                    <details style="margin-top: 1rem; margin-bottom: 1rem">
                         <summary>Ver detalles de la compra</summary>
                         @foreach ($sale->products as $product)
                             <div>

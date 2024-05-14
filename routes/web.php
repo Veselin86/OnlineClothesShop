@@ -54,7 +54,4 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
-
-
-
-
+Route::get('/sales/{sale}/pdf', [SaleController::class, 'generatePDF'])->name('sales.pdf');

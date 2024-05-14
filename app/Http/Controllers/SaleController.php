@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -113,11 +114,13 @@ class SaleController extends Controller
         //
     }
 
-    public function generatePdf(Sale $sale) 
+    public function generatePDF(Sale $sale) 
     {
-        $sale = Sale::findOrFail($sale);
-        
-        $pdf = Pdf::loadView('sales.pdf', compact('sale'));
+/*         $sale = Sale::findOrFail($sale);
+        $users = User::all(); */
+        $sale = Sale::with('user')->findOrFail($sale->id);
+        $user = $sale->user;
+        $pdf = Pdf::loadView('pdf.invoice', compact('sale', 'user'));
         return $pdf->stream('factura.pdf');   
     }
 }
