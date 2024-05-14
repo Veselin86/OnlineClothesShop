@@ -56,13 +56,16 @@ class GuzzleController extends Controller
         $request->validate([
             'product_id' => 'required',
             'quantity' => 'required|integer|min:1',
-            'size' => 'required|string',
-            'color' => 'required|string',
+            'size' => 'string',
+            'color' => 'string',
         ]);
 
         $productID = $request->product_id;
         $product = $this->fetchDataApi("https://fakestoreapi.com/products/{$productID}");
-        $product = json_decode($product);
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Producto no encontrado.');
+        }
 
         $userAddress = auth()->user()->addresses->first();
 
@@ -73,7 +76,7 @@ class GuzzleController extends Controller
         $sale = Sale::create([
             'user_id' => auth()->id(), 
             'status' => 'completed',
-            'date' => date(now()),
+            'date' => now(),
             'total' => $product->price * $request->quantity
         ]);
 

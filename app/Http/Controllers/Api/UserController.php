@@ -7,12 +7,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
+use App\Traits\LogLoginTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
+
+    use LogLoginTrait;
+
     public function index()
     {
         // Retorna una colección de usuarios
@@ -22,7 +26,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         // Valida y crea un usuario nuevo
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
@@ -38,12 +42,14 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password'))
         ]);
-        
+
+        $user->logCreation();
+
         return response()->json(['data' => $user], 201);
 
         return new UserResource($user);
     }
-/*     public function store(Request $request)
+    /*     public function store(Request $request)
     {
         // Valida y crea un usuario nuevo
         $validated = $request->validate([
@@ -83,26 +89,32 @@ class UserController extends Controller
         return response()->json('Deleted Succesfully'); // No content
     }
 
-   public function login(Request $request){
+    public function login(Request $request)
+    {
         $credentials = $request->only('email', 'password');
         if (Auth::guard('api')->attempt($credentials)) {
             $user = Auth::guard('api')->user();
             $jwt = JWTAuth::attempt($credentials);
             $success = true;
             $data = compact('user', 'jwt');
-            
+
+            self::logLogin();
+
             return compact('success', 'data');
-        }else{
+        } else {
             $success = false;
             $message = ' Credenciales incorectas';
+
+            self::badCredentials($credentials['email']);
+
             return compact('success', 'message');
         }
-    } 
+    }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::guard('api')->logout();
         $success = true;
         return compact('success');
-    } 
+    }
 }
-

@@ -17,7 +17,7 @@ Route::get('/fetchCategories', [GuzzleController::class, 'fetchCategories']); */
 Route::get('/external-categories', [GuzzleController::class, 'fetchCategories'])->name('external.categories');
 Route::get('/external-products/{category}', [GuzzleController::class, 'fetchProducts'])->name('external.products.category');
 Route::get('/external-product/{id}', [GuzzleController::class, 'show'])->name('external.product');
-Route::post('/external-product', [GuzzleController::class, 'store'])->middleware('check.stock');
+Route::post('/external-product', [GuzzleController::class, 'store']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
