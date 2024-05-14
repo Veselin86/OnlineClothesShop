@@ -10,10 +10,15 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
+use App\Mail\InvoicesMailabel;
+use App\Models\Sale;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /* Route::get('/fetchProducts', [GuzzleController::class, 'fetchProducts']);
 Route::get('/fetchCategories', [GuzzleController::class, 'fetchCategories']); */
+
 Route::get('/external-categories', [GuzzleController::class, 'fetchCategories'])->name('external.categories');
 Route::get('/external-products/{category}', [GuzzleController::class, 'fetchProducts'])->name('external.products.category');
 Route::get('/external-product/{id}', [GuzzleController::class, 'show'])->name('external.product');
@@ -22,11 +27,11 @@ Route::post('/external-product', [GuzzleController::class, 'storeApiSell']);
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/register', function () {
-    return view ('users.register');
+    return view('users.register');
 })->name('register');
 
 Route::get('/login', function () {
-    return view ('users.login');
+    return view('users.login');
 })->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -54,4 +59,18 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
+//Generando PDF con la factura
 Route::get('/sales/{sale}/pdf', [SaleController::class, 'generatePDF'])->name('sales.pdf');
+
+//Enviando correo electronico
+Route::get('invoiceMail', function ( $saleId, $userId ) {
+
+   $sale = Sale::find($saleId);
+    $user = User::find($userId);
+
+    Mail::to('info@fashionshop.com')
+        ->send(new InvoicesMailabel($sale, $user));
+
+    return "Email con invoce enviado";
+    
+})->name('invoiceMail');

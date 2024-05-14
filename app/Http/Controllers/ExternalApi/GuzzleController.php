@@ -3,16 +3,20 @@
 namespace App\Http\Controllers\ExternalApi;
 
 use App\Http\Controllers\Controller;
+use App\Mail\InvoicesMailabel;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Traits\FetchApiTrait;
+use App\Traits\GeneratePdfTrait;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class GuzzleController extends Controller
 {
     use FetchApiTrait;
+    use GeneratePdfTrait;
 
     public function fetchCategories()
     {
@@ -67,9 +71,7 @@ class GuzzleController extends Controller
         if (!$productData) {
             return redirect()->back()->with('error', 'Producto no encontrado.');
         }
-
-/*         $newProductID = (int) ($productData->id + 1000);
- */        
+               
         $product = Product::firstOrCreate(
             ['name' => $productData->title],
             [   
@@ -113,6 +115,11 @@ class GuzzleController extends Controller
         ]);
 
         $newAddress->save();
+
+        $this->generatePDF($sale);
+
+        Mail::to($request->user())
+            ->send(new InvoicesMailabel($sale, $request->user()));
 
         return redirect()->route('dashboard')->with('success', 'Producto comprado');
     }

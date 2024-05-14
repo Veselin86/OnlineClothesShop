@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoicesMailabel;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\User;
+use App\Traits\GeneratePdfTrait;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class SaleController extends Controller
 {
+
+    use GeneratePdfTrait;
+    
     /**
      * Display a listing of the resource.
      */
@@ -51,7 +57,7 @@ class SaleController extends Controller
         }
 
         $sale = Sale::create([
-            'user_id' => auth()->id(), 
+            'user_id' => auth()->id(),
             'status' => 'completed',
             'date' => date(now()),
             'total' => $product->price * $request->quantity
@@ -79,48 +85,11 @@ class SaleController extends Controller
 
         $newAddress->save();
 
+        $this->generatePDF($sale);
+
+        Mail::to($request->user())
+            ->send(new InvoicesMailabel($sale, $request->user()));
+            
         return redirect()->route('dashboard')->with('success', 'Producto comprado');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Sale $sale)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sale $sale)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Sale $sale)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Sale $sale)
-    {
-        //
-    }
-
-    public function generatePDF(Sale $sale) 
-    {
-/*         $sale = Sale::findOrFail($sale);
-        $users = User::all(); */
-        $sale = Sale::with('user')->findOrFail($sale->id);
-        $user = $sale->user;
-        $pdf = Pdf::loadView('pdf.invoice', compact('sale', 'user'));
-        return $pdf->stream('factura.pdf');   
     }
 }
