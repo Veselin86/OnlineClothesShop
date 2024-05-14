@@ -63,14 +63,13 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/sales/{sale}/pdf', [SaleController::class, 'generatePDF'])->name('sales.pdf');
 
 //Enviando correo electronico
-Route::get('invoiceMail', function ( $saleId, $userId ) {
+Route::get('invoiceMail', function ($saleId, $userId) {
 
-   $sale = Sale::find($saleId);
+    $sale = Sale::find($saleId);
     $user = User::find($userId);
 
     Mail::to('info@fashionshop.com')
         ->send(new InvoicesMailabel($sale, $user));
 
     return "Email con invoce enviado";
-    
 })->name('invoiceMail');

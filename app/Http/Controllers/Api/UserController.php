@@ -49,19 +49,6 @@ class UserController extends Controller
 
         return new UserResource($user);
     }
-    /*     public function store(Request $request)
-    {
-        // Valida y crea un usuario nuevo
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-        ]);
-
-        $user = User::create($validated);
-
-        return new UserResource($user);
-    } */
 
     public function show(User $user)
     {
@@ -86,7 +73,7 @@ class UserController extends Controller
         // Elimina un usuario
         $user->delete();
 
-        return response()->json('Deleted Succesfully'); // No content
+        return response()->json('Deleted Succesfully');
     }
 
     public function login(Request $request)

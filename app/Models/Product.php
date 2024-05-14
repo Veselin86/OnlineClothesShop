@@ -16,17 +16,6 @@ class Product extends Model
         'colors' => 'array',
     ];
 
-/*     // Opcionalmente, puedes definir métodos accesores específicos si necesitas más control
-    public function getSizesAttribute($value)
-    {
-        return json_decode($value, true);
-    }
-
-    public function getColorsAttribute($value)
-    {
-        return json_decode($value, true);
-    } */
-
     public function category()
     {
         return $this->belongsTo(Category::class);

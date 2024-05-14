@@ -62,9 +62,7 @@ class InvoicesMailabel extends Mailable
      */
     public function attachments(): array
     {
-        return [
-            /* Attachment::fromPath('/path/to/file'), */
-            /* Attachment::fromData(fn () => $this->pdf, 'invoice.pdf') */];
+        return [];
     }
 
 
