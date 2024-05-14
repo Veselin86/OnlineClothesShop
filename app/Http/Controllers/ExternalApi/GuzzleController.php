@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ExternalApi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\Product;
 use App\Models\Sale;
 use App\Traits\FetchApiTrait;
 use GuzzleHttp\Client;
@@ -50,7 +51,7 @@ class GuzzleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeApiSell(Request $request)
     {
 
         $request->validate([
@@ -61,12 +62,27 @@ class GuzzleController extends Controller
         ]);
 
         $productID = $request->product_id;
-        $product = $this->fetchDataApi("https://fakestoreapi.com/products/{$productID}");
+        $productData = $this->fetchDataApi("https://fakestoreapi.com/products/{$productID}");
 
-        if (!$product) {
+        if (!$productData) {
             return redirect()->back()->with('error', 'Producto no encontrado.');
         }
 
+        $newProductID = (int) ($productData->id + 1000);
+        
+        $product = Product::firstOrCreate(
+            ['id' => $newProductID],
+            [   
+                'name' => $productData->title,
+                'description' => $productData->description,
+                'price' => $productData->price,
+                'stock' => $productData->rating->count,
+                'image' => $productData->image,
+                'provider_id' => random_int(1, 3),
+                'category_id' => random_int(1, 4)
+            ]
+        );
+        
         $userAddress = auth()->user()->addresses->first();
 
         if (!$userAddress) {
