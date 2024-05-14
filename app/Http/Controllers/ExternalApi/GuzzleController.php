@@ -68,10 +68,10 @@ class GuzzleController extends Controller
             return redirect()->back()->with('error', 'Producto no encontrado.');
         }
 
-        $newProductID = (int) ($productData->id + 1000);
-        
+/*         $newProductID = (int) ($productData->id + 1000);
+ */        
         $product = Product::firstOrCreate(
-            ['id' => $newProductID],
+            ['name' => $productData->title],
             [   
                 'name' => $productData->title,
                 'description' => $productData->description,

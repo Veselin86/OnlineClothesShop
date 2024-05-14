@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Sale;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -110,5 +111,13 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         //
+    }
+
+    public function generatePdf(Sale $sale) 
+    {
+        $sale = Sale::findOrFail($sale);
+        
+        $pdf = Pdf::loadView('sales.pdf', compact('sale'));
+        return $pdf->stream('factura.pdf');   
     }
 }
